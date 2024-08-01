@@ -1,27 +1,42 @@
+// import React from "react";
+// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import Home from "./pages/Home";
+// import Login from "./pages/Login";
+// import Register from "./pages/Register";
+
+// function App() {
+//   return (
+//     <Router>
+//       <div>
+//         <Routes>
+//           <Route path="/" element={<Home />} />
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/register" element={<Register />} />
+//         </Routes>
+//       </div>
+//     </Router>
+//   );
+// }
+
+// export default App;
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Jobs from "./pages/Jobs";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
-import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
-const App = () => {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/jobs" element={<Jobs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </Router>
-  );
-};
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+      </Route>
+    </Routes>
+  </Router>
+);
 
 export default App;
