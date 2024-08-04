@@ -97,7 +97,10 @@ const loginUser = async (req, res) => {
     };
     res
       .status(200)
-      .cookie("token", token, { maxAge: 1 * 24 * 60 * 1000, httpOnly: true })
+      .cookie("token", token, {
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+        httpsOnly: true,
+      })
       .json({
         success: true,
         message: `Welcome ${user.fullname}`,
@@ -112,6 +115,19 @@ const loginUser = async (req, res) => {
   }
 };
 
+const logOut = async (req, res) => {
+  try {
+    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 // Middleware to verify token (for protected routes)
 exports.verifyToken = async (req, res, next) => {
   let token;
@@ -143,4 +159,57 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser };
+const updateProfile = async (req, res) => {
+  try {
+    const { fullname, email, phoneNumber, bio, skills } = req.body;
+    const file = req.file;
+    if (!fullname || !email || !phoneNumber || !bio || !skills) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all the required fields",
+      });
+    }
+    const skillsArray = skills.split(","); //covert string to array
+    const userId = req.id;
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    //cloudinary upload
+
+    //updating user data
+    user.fullname = fullname;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+    user.profile.bio = bio;
+    user.profile.skills = skillsArray;
+
+    await user.save();
+
+    const userResponse = {
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      profile: user.profile,
+    };
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: userResponse,
+    });
+
+    //resume section
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+module.exports = { registerUser, loginUser, logOut, updateProfile };
