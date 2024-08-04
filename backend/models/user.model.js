@@ -3,7 +3,7 @@ const validator = require("validator");
 
 const UserSchema = new mongoose.Schema(
   {
-    name: {
+    fullname: {
       type: String,
       required: [true, "Please enter your name"],
     },

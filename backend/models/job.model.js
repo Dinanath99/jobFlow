@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const UserSchema = new mongoose.Schema(
+const JobSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -52,5 +52,5 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("User", UserSchema);
-module.exports = User;
+const Job = mongoose.model("Jobs", JobSchema);
+module.exports = Job;
