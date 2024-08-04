@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      validate: [validator.isEmail, "Please enter a valid email address"],
       unique: true,
     },
 
@@ -23,12 +22,6 @@ const UserSchema = new mongoose.Schema(
     confirmPassword: {
       type: String,
       required: [true, "Please confirm your password"],
-      validate: {
-        validator: function (el) {
-          return el === this.password;
-        },
-        message: "Passwords do not match",
-      },
     },
 
     phoneNumber: {
@@ -40,12 +33,6 @@ const UserSchema = new mongoose.Schema(
         },
         message: "Please enter a valid mobile number",
       },
-    },
-
-    gender: {
-      type: String,
-      enum: ["male", "female", "other"],
-      required: [true, "Please select your gender"],
     },
 
     role: {
@@ -72,20 +59,6 @@ const UserSchema = new mongoose.Schema(
         default: "",
       },
     },
-
-    savedJobs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Job",
-      },
-    ],
-
-    appliedJobs: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Application",
-      },
-    ],
 
     createdAt: {
       type: Date,

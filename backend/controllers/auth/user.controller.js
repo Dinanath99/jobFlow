@@ -1,4 +1,4 @@
-const dotenv = require("dotenv");
+require("dotenv").config();
 const User = require("../../models/user.model");
 const { hashPassword, comparePassword } = require("../../helper/auth");
 const jwt = require("jsonwebtoken");
@@ -13,7 +13,7 @@ const registerUser = async (req, res) => {
       !email ||
       !phoneNumber ||
       !password ||
-      confirmPassword ||
+      !confirmPassword ||
       !role
     ) {
       return res.status(400).json({
@@ -55,37 +55,104 @@ const registerUser = async (req, res) => {
   }
 };
 
+// const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     if (!email || !password) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Please provide email and password",
+//       });
+//     }
+//     const user = await User.findOne({ email }).select("+password");
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Something is missing",
+//       });
+//     }
+//     const isMatch = await comparePassword(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "incorrect password",
+//       });
+//     }
+//     //check role is recruiter or applicant
+//     if (role !== user.role) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Please provide correct role",
+//       });
+//     }
+//     const tokenData = {
+//       userId: user._id,
+//     };
+//     const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
+//     const userResponse = {
+//       _id: user._id,
+//       fullname: user.fullname,
+//       email: user.email,
+//       phoneNumber: user.phoneNumber,
+//       role: user.role,
+//     };
+//     res
+//       .status(200)
+//       .cookie("token", token, {
+//         maxAge: 1 * 24 * 60 * 60 * 1000,
+//         httpsOnly: true,
+//       })
+//       .json({
+//         success: true,
+//         message: `Welcome ${user.fullname}`,
+//         token,
+//         user: userResponse,
+//       });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { email, password, role } = req.body; // Added role here
+    if (!email || !password || !role) {
+      // Added role check here
       return res.status(400).json({
         success: false,
-        message: "Please provide email and password",
+        message: "Please provide email, password, and role",
       });
     }
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "Something is missing",
+        message: "User not found",
       });
     }
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        message: "incorrect password",
+        message: "Incorrect password",
       });
     }
-    //check role is recruiter or applicant
+    // Check role is recruiter or applicant
     if (role !== user.role) {
       return res.status(400).json({
         success: false,
-        message: "Please provide correct role",
+        message: "Please provide the correct role",
       });
     }
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    const tokenData = {
+      userId: user._id,
+    };
+    const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     const userResponse = {
@@ -99,7 +166,7 @@ const loginUser = async (req, res) => {
       .status(200)
       .cookie("token", token, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
-        httpsOnly: true,
+        httpOnly: true,
       })
       .json({
         success: true,
