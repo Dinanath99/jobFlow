@@ -40,6 +40,8 @@ const registerUser = async (req, res) => {
       role,
     });
 
+    newUser.save();
+
     res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -84,14 +86,24 @@ const loginUser = async (req, res) => {
       });
     }
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "90d",
+      expiresIn: "1d",
     });
-    res.status(200).json({
-      success: true,
-      message: "User logged in successfully",
-      token,
-      data: user,
-    });
+    const userResponse = {
+      _id: user._id,
+      fullname: user.fullname,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+    };
+    res
+      .status(200)
+      .cookie("token", token, { maxAge: 1 * 24 * 60 * 1000, httpOnly: true })
+      .json({
+        success: true,
+        message: `Welcome ${user.fullname}`,
+        token,
+        user: userResponse,
+      });
   } catch (error) {
     res.status(500).json({
       success: false,
