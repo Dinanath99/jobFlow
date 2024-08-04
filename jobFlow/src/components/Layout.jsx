@@ -1,12 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
+import Login from "../pages/Login";
 
 // Navbar Component
 const Navbar = () => (
   <nav className="bg-white shadow-md">
     <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" className="text-2xl font-bold text-gray-900">
-        JobPortal
+        JobFlow
       </a>
       <div>
         <a
@@ -41,6 +42,7 @@ const Layout = () => (
   <div className="min-h-screen flex flex-col">
     <Navbar />
     <Header />
+
     <main className="flex-grow bg-gradient-to-r from-purple-100 to-blue-100">
       <div className="max-w-6xl mx-auto p-4">
         <Outlet /> {/* Renders the current route's component */}
