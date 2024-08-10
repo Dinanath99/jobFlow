@@ -3,6 +3,7 @@ const Company = require("../../models/company.model");
 const registerCompany = async (req, res) => {
   try {
     const { companyName } = req.body;
+
     if (!companyName) {
       return res.status(400).json({
         status: "fail",
@@ -13,16 +14,15 @@ const registerCompany = async (req, res) => {
     if (company) {
       return res.status(400).json({
         status: "fail",
-        message: "Company already exists",
+        message: "yopu can't register the same company twice",
       });
     }
     company = await Company.create({ name: companyName, userId: req.id });
-    res.status(201),
-      json({
-        sucess: true,
-        message: "Company registerd successfully",
-        company,
-      });
+    res.status(201).json({
+      sucess: true,
+      message: "Company registerd successfully",
+      company,
+    });
   } catch (error) {
     res.status(400).json({
       status: false,
@@ -42,6 +42,10 @@ const getCompany = async (req, res) => {
         message: "No company found",
       });
     }
+    res.status(200).json({
+      status: true,
+      companies,
+    });
   } catch (error) {
     console.log(error);
   }
@@ -101,4 +105,4 @@ const updateCompany = async (req, res) => {
     });
   }
 };
-module.exports = { registerCompany, getCompany, getCompanyById };
+module.exports = { registerCompany, getCompany, getCompanyById, updateCompany };
