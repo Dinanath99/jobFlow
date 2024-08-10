@@ -16,12 +16,10 @@ const UserSchema = new mongoose.Schema(
 
     password: {
       type: String,
-      required: [true, "Please enter a password"],
     },
 
     confirmPassword: {
       type: String,
-      required: [true, "Please confirm your password"],
     },
 
     phoneNumber: {

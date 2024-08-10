@@ -10,6 +10,6 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
-router.route("/profile/update").patch(isAuthenticated, updateProfile);
+router.route("/profile/update/").post(isAuthenticated, updateProfile);
 
 module.exports = router;

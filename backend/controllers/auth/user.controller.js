@@ -3,6 +3,7 @@ const User = require("../../models/user.model");
 const { hashPassword, comparePassword } = require("../../helper/auth");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const { profile } = require("console");
 
 const registerUser = async (req, res) => {
   try {
@@ -229,14 +230,12 @@ exports.verifyToken = async (req, res, next) => {
 const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
+    console.log(fullname);
     const file = req.file;
-    if (!fullname || !email || !phoneNumber || !bio || !skills) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide all the required fields",
-      });
+    let skillsArray;
+    if (skills) {
+      skillsArray = skills.split(","); //covert string to array
     }
-    const skillsArray = skills.split(","); //covert string to array
     const userId = req.id;
     let user = await User.findById(userId);
     if (!user) {
@@ -248,11 +247,11 @@ const updateProfile = async (req, res) => {
     //cloudinary upload
 
     //updating user data
-    user.fullname = fullname;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-    user.profile.bio = bio;
-    user.profile.skills = skillsArray;
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = skillsArray;
 
     await user.save();
 

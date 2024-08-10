@@ -3,21 +3,26 @@ const jwt = require("jsonwebtoken");
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    const token = req.cookie.token;
+    const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
+        message: "User not authenticated",
         success: false,
-        message: "Unauthorized access",
       });
     }
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded._id;
+
+    const decode = await jwt.verify(token, process.env.JWT_SECRET);
+    if (!decode) {
+      return res.status(401).json({
+        message: "Invalid token",
+        success: false,
+      });
+    }
+
+    req.id = decode.userId;
     next();
   } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid token",
-    });
+    console.log(error);
   }
 };
 
