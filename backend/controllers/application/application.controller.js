@@ -14,6 +14,12 @@ const applyJob = async (req, res) => {
       job: jobId,
       applicant: userId,
     });
+    if (existingApplication) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already applied for this job",
+      });
+    }
 
     //check if the job exists
     const job = await Job.findById(jobId);
@@ -25,11 +31,55 @@ const applyJob = async (req, res) => {
     }
 
     //create a new application
-    if (existingApplication) {
-      return res.status(400).json({
+    const newApplication = await Application.create({
+      job: jobId,
+      applicant: userId,
+    });
+    Job.applicantions.push(newApplication._id);
+    await Job.save();
+    res.status(200).json({
+      success: true,
+      message: "Application submitted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+const getAppliedJobs = async (req, res) => {
+  try {
+    const userId = req.id;
+    const application = await Application.find({ applicant: userId })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "job",
+        options: { sort: { createdAt: -1 } },
+        populate: {
+          path: "company",
+          options: { sort: { createAt: -1 } },
+        },
+      });
+    if (!application) {
+      return res.status(404).json({
         success: false,
-        message: "You have already applied for this job",
+        message: "No applications found",
       });
     }
-  } catch (error) {}
+    return res.status(200).json({
+      success: true,
+      application,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+//admin can view how many users have applied for the job
+module.exports = {
+  applyJob,
+  getAppliedJobs,
 };
