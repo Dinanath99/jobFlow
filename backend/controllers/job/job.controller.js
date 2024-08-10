@@ -61,4 +61,3 @@ const getAllJobs = async (req, res) => {
     };
   } catch (error) {}
 };
-module.exports = { postJob };
