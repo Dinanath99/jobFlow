@@ -20,6 +20,10 @@ const JobSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please enter salary"],
     },
+    experienceLevel: {
+      type: Number,
+      required: true,
+    },
     location: {
       type: String,
       required: [true, "Please enter location"],
