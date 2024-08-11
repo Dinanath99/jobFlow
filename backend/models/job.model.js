@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
 const JobSchema = new mongoose.Schema(
   {
@@ -46,7 +45,7 @@ const JobSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    applicants: [
+    applications: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Application",
@@ -56,5 +55,5 @@ const JobSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Job = mongoose.model("Jobs", JobSchema);
+const Job = mongoose.model("Job", JobSchema);
 module.exports = Job;
