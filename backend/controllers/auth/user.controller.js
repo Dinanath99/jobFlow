@@ -115,7 +115,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password, role } = req.body; // Added role here
-    console.log(email, password, role);
+
     if (!email || !password || !role) {
       // Added role check here
       return res.status(400).json({
