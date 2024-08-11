@@ -116,7 +116,7 @@ const getApplicants = async (req, res) => {
 //update status of the application
 const updateStatus = async (req, res) => {
   try {
-    const status = req.body;
+    const {status} = req.body;
     const applicationId = req.params.id;
     if (!status) {
       return res.status(400).json({

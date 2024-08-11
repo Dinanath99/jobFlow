@@ -9,6 +9,6 @@ const {
 router.route("/apply/:id").get(isAuthenticated, applyJob);
 router.route("/getAppliedJobs").get(isAuthenticated, getAppliedJobs);
 router.route("/getApplicants/:id").get(isAuthenticated, getApplicants);
-router.route("/updateStatus/:id").patch(isAuthenticated, updateStatus);
+router.route("/status/:id/update").post(isAuthenticated, updateStatus);
 
 module.exports = router;
