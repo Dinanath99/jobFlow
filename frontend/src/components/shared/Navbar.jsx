@@ -13,7 +13,7 @@ import { LogOut, User2 } from "lucide-react";
 
 const Navbar = () => {
   //conditional rendering based on user authentication
-  const user = true;
+  const user = false;
   return (
     <div className="bg-white px-4">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
@@ -29,9 +29,16 @@ const Navbar = () => {
             <li>Browse</li>
           </ul>
           {!user ? (
-            <div>
-              <Button variant="outline">Login</Button>
-              <Button>Signup</Button>
+            //login and signup button if user is not aunthenticated
+            <div className="flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="outline">Login</Button>
+              </Link>
+              <Link to="/signup">
+                <Button className="bg-[#6A38c2] hover:bg-[#290568]">
+                  Signup
+                </Button>
+              </Link>
             </div>
           ) : (
             <Popover>
