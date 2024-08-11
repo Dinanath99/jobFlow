@@ -8,8 +8,9 @@ const {
   logOut,
 } = require("../controllers/auth/user.controller");
 const isAuthenticated = require("../middleware/isAuthenticated");
+const singleUpload = require("../middleware/multer");
 
-router.route("/register").post(registerUser);
+router.route("/register").post(singleUpload, registerUser);
 router.route("/login").post(loginUser);
 router.route("/logout").get(logOut);
 

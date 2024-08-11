@@ -7,16 +7,9 @@ const { profile } = require("console");
 
 const registerUser = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, password, confirmPassword, role } =
-      req.body;
-    if (
-      !fullname ||
-      !email ||
-      !phoneNumber ||
-      !password ||
-      !confirmPassword ||
-      !role
-    ) {
+    const { fullname, email, phoneNumber, password, role } = req.body;
+
+    if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
         success: false,
         message: "Please provide all the required fields",
@@ -36,7 +29,7 @@ const registerUser = async (req, res) => {
       fullname,
       email,
       password: hashedPassword,
-      confirmPassword: hashedPassword,
+
       phoneNumber,
       role,
     });
@@ -122,6 +115,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password, role } = req.body; // Added role here
+    console.log(email, password, role);
     if (!email || !password || !role) {
       // Added role check here
       return res.status(400).json({
@@ -129,7 +123,7 @@ const loginUser = async (req, res) => {
         message: "Please provide email, password, and role",
       });
     }
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -170,16 +164,13 @@ const loginUser = async (req, res) => {
         httpOnly: true,
       })
       .json({
-        success: true,
         message: `Welcome ${user.fullname}`,
-        token,
         user: userResponse,
+        success: true,
+        token,
       });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    console.log(error);
   }
 };
 

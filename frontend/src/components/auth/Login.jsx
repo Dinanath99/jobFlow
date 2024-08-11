@@ -1,37 +1,51 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../shared/Navbar";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
+import { USER_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
 
 import { Button } from "@/components/ui/button";
-const [input, setInput] = useState({
-  email: "",
-  password: "",
-
-  role: "",
-});
-
-const changeEventHandler = (e) => {
-  setInput({
-    ...input, //spreading the input object
-    [e.target.name]: e.target.value, // setting the value of the input field
-  });
-};
-
-const changeFileHandler = (e) => {
-  setInput({
-    ...input,
-    file: e.target.files?.[0],
-  });
-};
-
-const submitHandler = (e) => {
-  e.preventDefault();
-};
+import { toast } from "sonner";
 
 const Login = () => {
+  const [input, setInput] = useState({
+    email: "",
+    password: "",
+    role: "",
+  });
+
+  //usenavigate hook to redirect to login page after succesfull signup
+  const navigate = useNavigate();
+
+  const changeEventHandler = (e) => {
+    setInput({
+      ...input, //spreading the input object
+      [e.target.name]: e.target.value, // setting the value of the input field
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
+        Headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        navigate("/");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <div>
       <Navbar />
