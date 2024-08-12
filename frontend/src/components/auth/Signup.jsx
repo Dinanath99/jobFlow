@@ -44,6 +44,7 @@ const Signup = () => {
     formData.append("password", input.password);
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("role", input.role);
+    formData.append("role", input.role);
 
     if (input.file) {
       formData.append("file", input.file);
