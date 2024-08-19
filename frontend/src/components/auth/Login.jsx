@@ -10,6 +10,8 @@ import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/redux/authSlice";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -20,6 +22,7 @@ const Login = () => {
 
   //usenavigate hook to redirect to login page after succesfull signup
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     setInput({
@@ -38,6 +41,7 @@ const Login = () => {
         withCredentials: true,
       });
       if (res.data.success) {
+        dispatch(setUser(res.data.userResponse));
         navigate("/");
         toast.success(res.data.message);
       }

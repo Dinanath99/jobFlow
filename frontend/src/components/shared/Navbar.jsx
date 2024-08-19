@@ -11,10 +11,12 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
 import { LogOut, User2 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   //conditional rendering based on user authentication
-  const user = false;
+  //const user = true;
+  const { user } = useSelector((state) => state.auth);
   return (
     <div className="bg-white px-4">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">

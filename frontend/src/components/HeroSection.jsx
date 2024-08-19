@@ -25,7 +25,7 @@ const HeroSection = () => {
         </div>
         {/* <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
           Unlock endless opportunities with JobFlow. Whether you're searching
-          for your first job or looking to advance your career, we've got you
+          for your first job or looking to advance your career, we've got you 
           covered. Explore thousands of job listings tailored to your skills and
           aspirations.
         </p> */}

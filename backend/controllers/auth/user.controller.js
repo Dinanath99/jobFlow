@@ -165,7 +165,7 @@ const loginUser = async (req, res) => {
       })
       .json({
         message: `Welcome ${user.fullname}`,
-        user: userResponse,
+        userResponse,
         success: true,
         token,
       });
