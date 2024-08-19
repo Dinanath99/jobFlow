@@ -27,8 +27,10 @@ const Profile = () => {
           </Button>
         </div>
         <div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 my-2">
             <Mail /> <span>dinanath@gmail.com</span>
+          </div>
+          <div className="flex items-center gap-3 my-2">
             <Contact /> <span>324125665</span>
           </div>
         </div>
