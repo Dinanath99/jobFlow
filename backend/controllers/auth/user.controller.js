@@ -123,7 +123,7 @@ const loginUser = async (req, res) => {
         message: "Please provide email, password, and role",
       });
     }
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -150,14 +150,14 @@ const loginUser = async (req, res) => {
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    const userResponse = {
+    user = {
       _id: user._id,
       fullname: user.fullname,
       email: user.email,
       phoneNumber: user.phoneNumber,
       role: user.role,
     };
-    res
+    return res
       .status(200)
       .cookie("token", token, {
         maxAge: 1 * 24 * 60 * 60 * 1000,
@@ -165,7 +165,7 @@ const loginUser = async (req, res) => {
       })
       .json({
         message: `Welcome ${user.fullname}`,
-        userResponse,
+        user,
         success: true,
         token,
       });
@@ -221,7 +221,7 @@ exports.verifyToken = async (req, res, next) => {
 const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    console.log(fullname);
+    console.log(req.body);
     const file = req.file;
     let skillsArray;
     if (skills) {
@@ -246,7 +246,7 @@ const updateProfile = async (req, res) => {
 
     await user.save();
 
-    const userResponse = {
+    user = {
       _id: user._id,
       fullname: user.fullname,
       email: user.email,
@@ -258,7 +258,7 @@ const updateProfile = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      data: userResponse,
+      user,
     });
 
     //resume section
@@ -269,4 +269,5 @@ const updateProfile = async (req, res) => {
     });
   }
 };
+
 module.exports = { registerUser, loginUser, logOut, updateProfile };

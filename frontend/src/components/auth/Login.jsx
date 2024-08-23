@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../shared/Navbar";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/redux/authSlice";
+import { setUser, setLoading } from "@/redux/authSlice";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -21,6 +21,7 @@ const Login = () => {
   });
 
   //usenavigate hook to redirect to login page after succesfull signup
+  const { loading, user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -34,6 +35,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
         Headers: {
           "Content-Type": "application/json",
@@ -41,15 +43,22 @@ const Login = () => {
         withCredentials: true,
       });
       if (res.data.success) {
-        dispatch(setUser(res.data.userResponse));
+        dispatch(setUser(res.data.user));
         navigate("/");
         toast.success(res.data.message);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div>
       <Navbar />
@@ -87,8 +96,8 @@ const Login = () => {
                 <Input
                   type="radio"
                   name="role"
-                  value="applicant"
-                  checked={input.role === "applicant"}
+                  value="Applicant"
+                  checked={input.role === "Applicant"}
                   onChange={changeEventHandler}
                   className="cursor-pointer"
                 />

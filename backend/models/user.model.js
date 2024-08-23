@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
 
     password: {
@@ -35,12 +34,12 @@ const UserSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ["applicant", "recruiter"],
-      default: "applicant",
+      enum: ["Applicant", "Recruiter"],
+      default: "Applicant",
       required: true,
     },
     profile: {
-      bio: String,
+      bio:{type:String},
       skills: [
         {
           type: String,

@@ -44,7 +44,6 @@ const Signup = () => {
     formData.append("password", input.password);
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("role", input.role);
-    formData.append("role", input.role);
 
     if (input.file) {
       formData.append("file", input.file);
@@ -122,8 +121,8 @@ const Signup = () => {
                 <Input
                   type="radio"
                   name="role"
-                  value="applicant"
-                  checked={input.role === "applicant"}
+                  value="Applicant"
+                  checked={input.role === "Applicant"}
                   onChange={changeEventHandler}
                   className="cursor-pointer"
                 />
