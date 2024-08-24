@@ -96,9 +96,11 @@ const getJobById = async (req, res) => {
     if (!jobid) {
       return res.status(400).json({ message: "Please provide job id" });
     }
-    const job = await Job.findById(jobid);
+    const job = await Job.findById(jobid).populate({
+      path: "applications",
+    });
     if (!job) {
-      return res.status(404).json({ message: "Job not found" });
+      return res.status(404).json({ message: "Job not found", success: false });
     }
     res.status(200).json({
       success: true,
