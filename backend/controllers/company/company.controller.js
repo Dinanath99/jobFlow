@@ -1,8 +1,41 @@
 const { json } = require("express");
 const Company = require("../../models/company.model");
+// const registerCompany = async (req, res) => {
+//   try {
+//     const { companyName } = req.body;
+
+//     if (!companyName) {
+//       return res.status(400).json({
+//         status: "fail",
+//         message: "Please enter your company name",
+//       });
+//     }
+//     let company = await Company.findOne({ name: companyName });
+//     if (company) {
+//       return res.status(400).json({
+//         status: "fail",
+//         message: "yopu can't register the same company twice",
+//       });
+//     }
+//     company = await Company.create({ name: companyName, userId: req.id });
+//     res.status(201).json({
+//       sucess: true,
+//       message: "Company registerd successfully",
+//       company,
+//     });
+//   } catch (error) {
+//     res.status(400).json({
+//       status: false,
+//       message: error.message,
+//     });
+//     console.log(error);
+//   }
+// };
+
 const registerCompany = async (req, res) => {
   try {
     const { companyName } = req.body;
+    console.log(companyName);
 
     if (!companyName) {
       return res.status(400).json({
@@ -10,25 +43,28 @@ const registerCompany = async (req, res) => {
         message: "Please enter your company name",
       });
     }
+
     let company = await Company.findOne({ name: companyName });
     if (company) {
-      return res.status(400).json({
+      return res.status(409).json({
         status: "fail",
-        message: "yopu can't register the same company twice",
+        message: "You can't register the same company twice",
       });
     }
+
     company = await Company.create({ name: companyName, userId: req.id });
+
     res.status(201).json({
-      sucess: true,
-      message: "Company registerd successfully",
+      success: true,
+      message: "Company registered successfully",
       company,
     });
   } catch (error) {
-    res.status(400).json({
-      status: false,
+    res.status(500).json({
+      status: "error",
       message: error.message,
     });
-    console.log(error);
+    console.log("Error in registerCompany:", error);
   }
 };
 
