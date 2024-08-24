@@ -81,7 +81,7 @@ const getCompany = async (req, res) => {
       });
     }
     res.status(200).json({
-      status: true,
+      success: true,
       companies,
     });
   } catch (error) {
