@@ -98,7 +98,7 @@ const CompanySetup = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.response?.data?.message || "Failed to update company");
+      toast.error(error.response?.data?.message || "Failed to update company"); // Display error message if available
     } finally {
       setLoading(false);
     }
