@@ -214,7 +214,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     phoneNumber: user?.phoneNumber || "",
     bio: user?.profile?.bio || "",
     skills: user?.profile?.skills?.join(", ") || "", // Join skills into a string for input
-    file: null,
+    file: user?.profile?.resume || "",
   });
 
   const dispatch = useDispatch();
@@ -239,11 +239,11 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     formData.append("bio", input.bio);
     formData.append("skills", input.skills.split(", ")); // Split skills from string back to array
     if (input.file) {
-      formData.append("resume", input.file);
+      formData.append("file", input.file);
     }
 
     try {
-      const res = await axios.post(
+      const res = await axios.put(
         `${USER_API_END_POINT}/profile/update`,
         formData,
         {
@@ -355,7 +355,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 id="file"
                 name="file"
                 type="file"
-                accept="application/pdf"
+                // // accept="application/pdf"
                 onChange={fileChangeHandler}
                 className="col-span-3"
               />

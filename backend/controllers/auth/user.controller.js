@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const { profile } = require("console");
 
+const cloudinary = require("../../utils/cloudinary");
+const getDataUri = require("../../utils/datauri");
+
 const registerUser = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
@@ -15,6 +18,10 @@ const registerUser = async (req, res) => {
         message: "Please provide all the required fields",
       });
     }
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
@@ -29,9 +36,11 @@ const registerUser = async (req, res) => {
       fullname,
       email,
       password: hashedPassword,
-
       phoneNumber,
       role,
+      profile: {
+        profilePhoto: cloudResponse.secure_url,
+      },
     });
 
     newUser.save();
@@ -49,7 +58,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// const loginUser = async (req, res) => {
+//const loginUser = async (req, res) => {
 //   try {
 //     const { email, password } = req.body;
 //     if (!email || !password) {
@@ -112,24 +121,87 @@ const registerUser = async (req, res) => {
 //   }
 // };
 
+// const loginUser = async (req, res) => {
+//   try {
+//     const { email, password, role } = req.body; // Added role here
+
+//     if (!email || !password || !role) {
+//       // Added role check here
+//       return res.status(400).json({
+//         success: false,
+//         message: "Please provide email, password, and role",
+//       });
+//     }
+//     let user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+//     const isMatch = await comparePassword(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Incorrect password",
+//       });
+//     }
+//     // Check role is recruiter or applicant
+//     if (role !== user.role) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Please provide the correct role",
+//       });
+//     }
+//     const tokenData = {
+//       userId: user._id,
+//     };
+//     const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
+//     user = {
+//       _id: user._id,
+//       fullname: user.fullname,
+//       email: user.email,
+//       phoneNumber: user.phoneNumber,
+//       role: user.role,
+//     };
+//     return res
+//       .status(200)
+//       .cookie("token", token, {
+//         maxAge: 1 * 24 * 60 * 60 * 1000,
+//         httpOnly: true,
+//       })
+//       .json({
+//         message: `Welcome ${user.fullname}`,
+//         user,
+//         success: true,
+//         token,
+//       });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 const loginUser = async (req, res) => {
   try {
-    const { email, password, role } = req.body; // Added role here
+    const { email, password, role } = req.body;
 
     if (!email || !password || !role) {
-      // Added role check here
       return res.status(400).json({
         success: false,
         message: "Please provide email, password, and role",
       });
     }
-    let user = await User.findOne({ email });
+
+    let user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
+
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -137,26 +209,31 @@ const loginUser = async (req, res) => {
         message: "Incorrect password",
       });
     }
-    // Check role is recruiter or applicant
+
     if (role !== user.role) {
       return res.status(400).json({
         success: false,
         message: "Please provide the correct role",
       });
     }
+
     const tokenData = {
       userId: user._id,
     };
+
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
+
     user = {
       _id: user._id,
       fullname: user.fullname,
       email: user.email,
       phoneNumber: user.phoneNumber,
       role: user.role,
+      profile: user.profile, // Ensure the profile object is included
     };
+
     return res
       .status(200)
       .cookie("token", token, {
@@ -218,15 +295,77 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
+// const updateProfile = async (req, res) => {
+//   try {
+//     const { fullname, email, phoneNumber, bio, skills } = req.body;
+//     console.log(req.body);
+//     const file = req.file;
+//     //cloudinary upload
+//     const fileUri = getDataUri(file);
+//     const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+//     let skillsArray;
+//     if (skills) {
+//       skillsArray = skills.split(","); //covert string to array
+//     }
+//     const userId = req.id;
+//     let user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+
+//     //updating user data
+//     if (fullname) user.fullname = fullname;
+//     if (email) user.email = email;
+//     if (phoneNumber) user.phoneNumber = phoneNumber;
+//     if (bio) user.profile.bio = bio;
+//     if (skills) user.profile.skills = skillsArray;
+
+//     //resume comes here
+//     if (cloudResponse) {
+//       user.profile.resume = cloudResponse.secure_url; //store the url in the dtabase
+//       user.profile.resumeOriginalName = file.originalname; //store the original name of the file
+//     }
+//     await user.save();
+
+//     user = {
+//       _id: user._id,
+//       fullname: user.fullname,
+//       email: user.email,
+//       phoneNumber: user.phoneNumber,
+//       role: user.role,
+//       profile: user.profile,
+//     };
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Profile updated successfully",
+//       user,
+//     });
+
+//     //resume section
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    console.log(req.body);
-    const file = req.file;
+    const file = req.file; // Get the file from the request
     let skillsArray;
+
+    // Check if skills were provided
     if (skills) {
-      skillsArray = skills.split(","); //covert string to array
+      skillsArray = skills.split(","); // Convert string to array
     }
+
     const userId = req.id;
     let user = await User.findById(userId);
     if (!user) {
@@ -235,14 +374,23 @@ const updateProfile = async (req, res) => {
         message: "User not found",
       });
     }
-    //cloudinary upload
 
-    //updating user data
+    // Updating user data
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
+    if (skillsArray) user.profile.skills = skillsArray;
+
+    // Handle file upload if a file is provided
+    if (file) {
+      const fileUri = getDataUri(file); // Use getDataUri to convert the file to a Data URI
+      const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+
+      // Update resume in profile
+      user.profile.resume = cloudResponse.secure_url; // Store the URL in the database
+      user.profile.resumeOriginalName = file.originalname; // Store the original name of the file
+    }
 
     await user.save();
 
@@ -260,8 +408,6 @@ const updateProfile = async (req, res) => {
       message: "Profile updated successfully",
       user,
     });
-
-    //resume section
   } catch (error) {
     res.status(500).json({
       success: false,

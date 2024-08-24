@@ -68,10 +68,10 @@ const Profile = () => {
           {isResume ? (
             <a
               target="blank"
-              href="https://www.dinanath.com.np"
+              href={user?.profile?.resume}
               className="text-blue-500 w-full hover:underline cursor-pointer"
             >
-              Download
+              {user?.profile?.resumeOriginalName}
             </a>
           ) : (
             <span>NA</span>

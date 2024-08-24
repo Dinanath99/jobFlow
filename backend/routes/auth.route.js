@@ -16,6 +16,6 @@ router.route("/logout").get(logOut);
 
 router
   .route("/profile/update/")
-  .post(isAuthenticated, singleUpload, updateProfile);
+  .put(isAuthenticated, singleUpload, updateProfile);
 
 module.exports = router;

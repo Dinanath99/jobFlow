@@ -7,13 +7,16 @@
 //   },
 // });
 
-// export default store;import { configureStore } from "@reduxjs/toolkit";
+// export default store;
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./authSlice"; // Adjust the path if necessary
 
+import authReducer from "./authSlice"; // Adjust the path if necessary
+import authSlice from "./authSlice";
+import jobSlice from "./jobSlice";
 const store = configureStore({
   reducer: {
-    auth: authReducer,
+    auth: authSlice,
+    job: jobSlice,
   },
 });
 
