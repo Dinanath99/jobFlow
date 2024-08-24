@@ -1,5 +1,7 @@
 const { json } = require("express");
 const Company = require("../../models/company.model");
+const getDataUri = require("../../utils/datauri");
+const cloudinary = require("../../utils/cloudinary");
 // const registerCompany = async (req, res) => {
 //   try {
 //     const { companyName } = req.body;
@@ -113,12 +115,17 @@ const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
     const file = req.file;
+
     //cloudinary upload
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+    const logo = cloudResponse.secure_url;
     const updateData = {
       name,
       description,
       website,
       location,
+      logo,
     };
     const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
@@ -130,11 +137,12 @@ const updateCompany = async (req, res) => {
       });
     }
     res.status(200).json({
-      status: true,
-      message: "Company updated successfully",
+      success: true,
+      message: "Company information updated successfully",
       company,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       status: false,
       message: error.message,
