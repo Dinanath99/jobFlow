@@ -12,15 +12,32 @@ import {
 } from "../ui/table";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CompaniesTable = () => {
   const { companies = [] } = useSelector((store) => store.company);
-  console.log(companies); // Ensure this logs the companies array
-  const [filterCompany, setFilterCompany] = useState(companies);
+  const { searchCompanyByText } = useSelector((store) => store.company);
+  const [filterCompany, setFilterCompany] = useState([]);
 
-  useEffect(()=>{
-    
-  })
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const filteredCompany =
+      Array.isArray(companies) && companies.length > 0
+        ? companies.filter((company) => {
+            if (!searchCompanyByText) {
+              return true;
+            }
+            return company?.name
+              ?.toLowerCase()
+              .includes(searchCompanyByText.toLowerCase());
+          })
+        : [];
+
+    console.log("Filtered Company:", filteredCompany); // Log filtered companies
+    setFilterCompany(filteredCompany);
+  }, [companies, searchCompanyByText]);
+
   return (
     <div>
       <Table>
@@ -34,14 +51,14 @@ const CompaniesTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {companies.length === 0 ? (
+          {filterCompany.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} style={{ textAlign: "center" }}>
                 Companies not found or not registered
               </TableCell>
             </TableRow>
           ) : (
-            companies.map((company) => (
+            filterCompany.map((company) => (
               <TableRow key={company._id}>
                 <TableCell>
                   <Avatar>
@@ -56,7 +73,12 @@ const CompaniesTable = () => {
                       <MoreHorizontal />
                     </PopoverTrigger>
                     <PopoverContent className="w-32">
-                      <div className="flex items-center gap-2 w-fit cursor-pointer">
+                      <div
+                        onClick={() =>
+                          navigate(`/recruiter/companies/${company._id}`)
+                        } // Update this line
+                        className="flex items-center gap-2 w-fit cursor-pointer"
+                      >
                         <Edit2 className="w-4" />
                         <span>Edit</span>
                       </div>
