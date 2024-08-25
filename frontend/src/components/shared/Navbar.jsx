@@ -346,7 +346,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link className="hover:text-blue-600" to="/admin/jobs">
+                  <Link className="hover:text-blue-600" to="/recruiter/postjob">
                     Jobs
                   </Link>
                 </li>
