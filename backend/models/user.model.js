@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const { validate } = require("./job.model");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -11,6 +12,12 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      validate: {
+        validator: function (el) {
+          return validator.isEmail(el);
+        },
+        message: "Please enter a valid email",
+      },
     },
 
     password: {
@@ -39,7 +46,7 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     profile: {
-      bio:{type:String},
+      bio: { type: String },
       skills: [
         {
           type: String,

@@ -368,6 +368,11 @@ const Navbar = () => {
                     Browse
                   </Link>
                 </li>
+                <li>
+                  <Link className="hover:text-blue-600" to="/blog">
+                    Blog
+                  </Link>
+                </li>
               </>
             )}
           </ul>

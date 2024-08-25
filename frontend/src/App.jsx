@@ -11,6 +11,7 @@ import Description from "./components/JobDescription";
 import Companies from "./components/recruiter/Companies";
 import CompanyCreate from "./components/recruiter/CompanyCreate";
 import CompanySetup from "./components/recruiter/CompanySetup";
+import Blog from "./components/Blog";
 
 const appRouter = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/browse",
     element: <Browse />,
+  },
+  {
+    path: "/blog",
+    element: <Blog/>,
   },
   {
     path: "/profile",

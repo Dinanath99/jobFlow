@@ -10,13 +10,17 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const CompaniesTable = () => {
   const { companies = [] } = useSelector((store) => store.company);
   console.log(companies); // Ensure this logs the companies array
+  const [filterCompany, setFilterCompany] = useState(companies);
 
+  useEffect(()=>{
+    
+  })
   return (
     <div>
       <Table>

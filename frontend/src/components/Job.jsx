@@ -35,7 +35,7 @@ const Job = ({ job }) => {
         </Button>
         <div>
           <h1 className="font-medium text-lg">{job?.company?.name}</h1>
-          <p>Nepal</p>
+          <p>{job?.company?.location}</p>
         </div>
       </div>
       <div>
@@ -44,13 +44,13 @@ const Job = ({ job }) => {
       </div>
       <div className="flex items-center gap-2 mt-4">
         <Badge className="text-blue-700 font-bold bg-slate-200 hover:bg-slate-400">
-          {job?.position}
+          Position: {job?.position}
         </Badge>
         <Badge className="text-[#F83002] font-bold bg-slate-200 hover:bg-slate-400">
           {job?.jobType}
         </Badge>
         <Badge className="text-[#7209b7] font-bold bg-slate-200 hover:bg-slate-400">
-          {job?.salary}
+          Salary: {job?.salary}
         </Badge>
       </div>
       <div className="flex items-center gap-4 mt-4">
