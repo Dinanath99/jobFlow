@@ -18,27 +18,31 @@ const RecruiterJobsTable = () => {
   console.log(companies);
   const { allAdminJobs = [] } = useSelector((store) => store.job);
   console.log(allAdminJobs);
-  const { searchCompanyByText } = useSelector((store) => store.company);
+  const { searchJobByText } = useSelector((store) => store.job);
   const [filterJobs, setFilterJobs] = useState(allAdminJobs);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const filteredCompany =
+    const filteredJobs =
       Array.isArray(companies) && allAdminJobs.length > 0
         ? allAdminJobs.filter((job) => {
-            if (!searchCompanyByText) {
+            if (!searchJobByText) {
               return true;
             }
-            return company?.name
-              ?.toLowerCase()
-              .includes(searchCompanyByText.toLowerCase());
+            return (
+              job?.title
+                ?.toLowerCase()
+                .includes(searchJobByText.toLowerCase()) ||
+              job?.company?.name
+                .toLowerCase()
+                .includes(searchJobByText.toLowerCase())
+            );
           })
         : [];
 
-    console.log("Filtered Company:", filteredCompany); // Log filtered companies
-    setFilterJobs(filteredCompany);
-  }, [companies, searchCompanyByText]);
+    setFilterJobs(filteredJobs);
+  }, [allAdminJobs, searchJobByText]);
 
   return (
     <div>
@@ -62,7 +66,8 @@ const RecruiterJobsTable = () => {
           ) : (
             filterJobs.map((job) => (
               <TableRow key={job._id}>
-                <TableCell>{job.title}</TableCell>
+                <TableCell>{job?.company?.name}</TableCell>
+                <TableCell>{job?.title}</TableCell>
                 <TableCell>{job.createdAt.split("T")[0]}</TableCell>
                 <TableCell className="text-right cursor-pointer">
                   <Popover>
