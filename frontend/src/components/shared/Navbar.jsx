@@ -1,4 +1,3 @@
-
 import jobflow from "@/assets/jobflow.png";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -39,7 +38,9 @@ const Navbar = () => {
     <div className="bg-white shadow-md px-4 py-2 fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
-          <img src={jobflow} alt="logo" className="h-12" />
+          <Link to="/">
+            <img src={jobflow} alt="logo" className="h-12" />
+          </Link>
         </div>
         <div className="flex items-center gap-6">
           <ul className="flex space-x-6 font-medium text-gray-700">

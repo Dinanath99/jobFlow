@@ -58,7 +58,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FilterCard from "./FilterCard";
 import Job from "./Job";
-import RecommendedJobs from "./RecommendedJobs"; // Import the new component
+import RecommendedJobs from "./JobRecommendation"; // Import the new component
 import Navbar from "./shared/Navbar";
 
 const Jobs = () => {
