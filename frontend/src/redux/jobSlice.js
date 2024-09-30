@@ -23,7 +23,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const jobSlice = createSlice({
   name: "job",
   initialState: {
-    allJobs: [],
+    allJobs: [],  // initial state of allJobs
     allAdminJobs: [],
     singleJob: null,
     searchJobByText: "",

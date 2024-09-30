@@ -170,22 +170,23 @@
 
 // export default Signup;
 
-import React from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { USER_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
 import { useFormik } from "formik";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import * as Yup from "yup";
 import Navbar from "../shared/Navbar";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { USER_API_END_POINT } from "@/utils/constant";
-import { toast } from "sonner";
 
 const Signup = () => {
   const navigate = useNavigate();
-
+  const user = useSelector((state) => state.auth.user); //return the user from the state
   const formik = useFormik({
     initialValues: {
       fullname: "",
@@ -248,6 +249,12 @@ const Signup = () => {
     },
   });
 
+  useEffect(() => {
+    //if user is already logged in then redirect to home page
+    if (user) {
+      navigate("/");
+    }
+  });
   return (
     <div className="my-20">
       <Navbar />

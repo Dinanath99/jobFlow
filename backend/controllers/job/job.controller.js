@@ -13,6 +13,7 @@ const postJob = async (req, res) => {
       experience,
       position,
       companyId,
+      skills,
     } = req.body;
     const userId = req.id;
     console.log(userId);
@@ -32,7 +33,8 @@ const postJob = async (req, res) => {
     const job = await Job.create({
       title,
       description,
-      requirements: requirements.split(","),
+      // requirements: requirements.split(","),
+      requirements: requirements,
       salary: Number(salary),
       location,
       jobType,
@@ -40,6 +42,7 @@ const postJob = async (req, res) => {
       position,
       company: companyId,
       created_by: userId,
+      skills,
     });
     res.status(201).json({
       success: true,

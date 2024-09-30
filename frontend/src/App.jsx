@@ -1,19 +1,20 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/shared/Navbar";
-import Signup from "./components/auth/Signup";
 import Login from "./components/auth/Login";
-import Home from "./components/Home";
-import Jobs from "./components/Jobs";
+import Signup from "./components/auth/Signup";
+import Blog from "./components/Blog";
 import Browse from "./components/Browse";
-import Profile from "./components/Profile";
+import Home from "./components/Home";
 import Description from "./components/JobDescription";
+import Jobs from "./components/Jobs";
+import Profile from "./components/Profile";
+import Applicants from "./components/recruiter/Applicants";
 import Companies from "./components/recruiter/Companies";
 import CompanyCreate from "./components/recruiter/CompanyCreate";
 import CompanySetup from "./components/recruiter/CompanySetup";
-import Blog from "./components/Blog";
-import RecruiterJobs from "./components/recruiter/RecruiterJobs";
 import PostJob from "./components/recruiter/PostJob";
+import ProtectedRoute from "./components/recruiter/ProtectedRoute";
+import RecruiterJobs from "./components/recruiter/RecruiterJobs";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -51,7 +52,11 @@ const appRouter = createBrowserRouter([
   //recruiter routes
   {
     path: "recruiter/companies",
-    element: <Companies />,
+    element: (
+      <ProtectedRoute>
+        <Companies />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "recruiter/companies/create",
@@ -63,11 +68,15 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "recruiter/recruiterJobs",
-    element: <RecruiterJobs/>,
+    element: <RecruiterJobs />,
   },
   {
     path: "recruiter/jobs/create",
-    element: <PostJob/>,
+    element: <PostJob />,
+  },
+  {
+    path: "recruiter/jobs/:id/applicants",
+    element: <Applicants />,
   },
 ]);
 

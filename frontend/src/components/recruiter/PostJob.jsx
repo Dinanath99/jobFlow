@@ -1,5 +1,9 @@
+import { JOB_API_END_POINT } from "@/utils/constant";
+import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import Navbar from "../shared/Navbar";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -12,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Loader2 } from "lucide-react";
 
 const companyArray = [];
 const PostJob = () => {
@@ -26,17 +31,49 @@ const PostJob = () => {
     position: "",
     companyId: "",
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   //importing the companies
   const { companies } = useSelector((store) => store.company);
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
+  const selectChangeHandler = (value) => {
+    const selectedCompany = companies.find(
+      (company) => company.name.toLowerCase() === value
+    );
+    setInput({ ...input, companyId: selectedCompany._id });
+  };
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await axios.post(`${JOB_API_END_POINT}/post`, input, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/recruiter/recruiterJobs");
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center w-screen my-28">
-        <form className="p-8 max-w-4xl border border-gray-300 shadow-lg rounded-md">
+        <form
+          onSubmit={submitHandler}
+          className="p-8 max-w-4xl border border-gray-300 shadow-lg rounded-md"
+        >
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label>Title</Label>
@@ -127,7 +164,7 @@ const PostJob = () => {
               />
             </div>
             {companies.length > 0 && (
-              <Select>
+              <Select onValueChange={selectChangeHandler}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder={"Select a company"} />
                 </SelectTrigger>
@@ -135,7 +172,7 @@ const PostJob = () => {
                   <SelectGroup>
                     {companies.map((company) => {
                       return (
-                        <SelectItem value={company._id}>
+                        <SelectItem value={company?.name?.toLowerCase()}>
                           {company.name}
                         </SelectItem>
                       );
@@ -145,7 +182,9 @@ const PostJob = () => {
               </Select>
             )}
           </div>
-          <Button className="w-full mt-4">Post New Job</Button>
+          {
+            loading? <Button className="w-full my-4"><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Post New Job</Button>:<Button type="sbumit" className="w-full my-4">Post New Job</Button>
+          }
           {companies.length === 0 && (
             <p className="text-xs text-red-600 font-bold text-center my-3">
               Please register a companhy first, before posting a job

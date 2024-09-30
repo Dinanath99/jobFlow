@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import useGetAppliedJob from "@/hooks/useGetAppliedJob";
+import { Label } from "@radix-ui/react-label";
+import { Contact, Mail, Pen } from "lucide-react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import AppliedJobTable from "./AppliedJobTable";
 import Navbar from "./shared/Navbar";
 import { Avatar, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Contact, Mail, Pen } from "lucide-react";
-import { Label } from "@radix-ui/react-label";
-import AppliedJobTable from "./AppliedJobTable";
+import { Button } from "./ui/button";
 import UpdateProfileDialog from "./UpdateProfileDialog";
-import { useSelector } from "react-redux";
 
 //const skills = ["React", "Node", "Express", "MongoDB"];
 
 const isResume = true;
 const Profile = () => {
+  useGetAppliedJob();
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
   console.log("User Data:", user);

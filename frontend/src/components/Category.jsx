@@ -1,48 +1,6 @@
-// import React from "react";
-// import {
-//   Carousel,
-//   CarouselContent,
-//   CarouselItem,
-//   CarouselNext,
-//   CarouselPrevious,
-// } from "./ui/carousel";
-// import { Button } from "./ui/button";
-
-// const Category = () => {
-//   const Category = [
-//     "Frontend Developer",
-//     "Backend Developer",
-//     "Full Stack Developer",
-//     "Devops",
-//     "Data engineer",
-//     "Education and teaching jobs",
-//   ];
-//   return (
-//     <div>
-//       <Carousel className="w-full max-w-xl mx-auto my-20">
-//         <CarouselContent>
-//           {Category.map((category, index) => (
-//             <CarouselItem className="md:basis-1/3 lg-basis-1/2">
-//               <Button
-//                 variant="outline"
-//                 className="rounded-full bg-[#0d26a5] text-white"
-//               >
-//                 {category}
-//               </Button>
-//             </CarouselItem>
-//           ))}
-//         </CarouselContent>
-//         <CarouselPrevious />
-//         <CarouselNext />
-//       </Carousel>
-//     </div>
-//   );
-// };
-
-// export default Category;
-
-//testing
-import React from "react";
+import { setSearchedQuery } from "@/redux/jobSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 
 const Category = () => {
@@ -75,7 +33,13 @@ const Category = () => {
       description: "Explore opportunities in education and training.",
     },
   ];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const searchJobHandler = (query) => {
+    dispatch(setSearchedQuery(query));
+    navigate("/browse");
+  };
   return (
     <div className="relative bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-white py-20">
       <div className="relative z-10">
@@ -96,6 +60,7 @@ const Category = () => {
                 className="flex flex-col items-center p-6 rounded-2xl shadow-lg bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100"
               >
                 <Button
+                  onClick={() => searchJobHandler(category.name)}
                   variant="outline"
                   className="rounded-full bg-[#0d26a5] text-white mb-4"
                 >
