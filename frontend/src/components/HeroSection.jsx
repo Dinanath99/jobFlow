@@ -1,3 +1,4 @@
+
 import { setSearchedQuery } from "@/redux/jobSlice";
 import { Search } from "lucide-react";
 import { useState } from "react";
@@ -9,19 +10,25 @@ const HeroSection = () => {
   const [query, setQuery] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const searchJobHandler = () => {
     dispatch(setSearchedQuery(query));
     navigate("/browse");
   };
+
   return (
-    <div className="relative text-center bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-white py-20">
+    <div className="relative text-center bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white py-24">
+      {/* Background image with overlay */}
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="https://via.placeholder.com/1500x600" // Replace with your desired background image
+          src="https://images.unsplash.com/photo-1542744173-05336fcc7ad4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80"
           alt="Hero Background"
-          className="w-full h-full object-cover opacity-30"
+          className="w-full h-full object-cover opacity-40"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50"></div>
       </div>
+
+      {/* Hero Section Content */}
       <div className="relative z-10 flex flex-col gap-6 my-12">
         <span className="mx-auto px-8 py-4 rounded-full bg-opacity-75 bg-white text-gray-800 font-semibold shadow-xl">
           Welcome to JobFlow - Your Path to Success
@@ -36,6 +43,8 @@ const HeroSection = () => {
           covered. Explore thousands of job listings tailored to your skills and
           aspirations. Start your journey now!
         </p>
+
+        {/* Search Bar */}
         <div className="flex w-[60%] mx-auto shadow-lg border border-gray-300 rounded-full bg-white overflow-hidden">
           <input
             type="text"

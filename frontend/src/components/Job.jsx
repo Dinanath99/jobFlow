@@ -1,30 +1,72 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
+import useGetAllJobs from "@/hooks/useGetAllJobs";
 import { Bookmark } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 
 const Job = ({ job }) => {
+  useGetAllJobs();
   const navigate = useNavigate();
-  // const jobid = "jobid"; // this would normally be dynamic
+
+  // State to manage bookmark status
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Function to calculate days ago
   const daysAgoFunction = (mongodbTime) => {
     const createdAt = new Date(mongodbTime);
     const currentTime = new Date();
     const timeDifference = currentTime - createdAt;
-    return Math.floor(timeDifference / (1000 * 24 * 60 * 60));
+    return Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   };
+
+  // Handle bookmark toggle
+  const toggleBookmark = () => {
+    setIsBookmarked((prev) => !prev);
+  };
+
+  // Store bookmarks in local storage
+  useEffect(() => {
+    const bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    const isJobBookmarked = bookmarks.includes(job?._id);
+    setIsBookmarked(isJobBookmarked);
+  }, [job]);
+
+  // Persist bookmarks in local storage
+  useEffect(() => {
+    const bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+    if (isBookmarked) {
+      // Add job ID to bookmarks
+      if (!bookmarks.includes(job?._id)) {
+        bookmarks.push(job?._id);
+      }
+    } else {
+      // Remove job ID from bookmarks
+      const filteredBookmarks = bookmarks.filter((id) => id !== job?._id);
+      localStorage.setItem("bookmarks", JSON.stringify(filteredBookmarks));
+      return;
+    }
+    localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+  }, [isBookmarked, job]);
+
   return (
-    <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
-      <div className="flex items-center justify-between">
+    <div className="p-4 rounded-md shadow-xl bg-white border border-gray-100 my-20 m-1 mb-1">
+      <div className="flex items-center justify-between ">
         <p className="text-sm text-gray-500">
-          {daysAgoFunction(job?.createdAt) == 0
+          {daysAgoFunction(job?.createdAt) === 0
             ? "Today"
-            : `${daysAgoFunction(job?.createdAt)}`}
-          days ago
+            : `${daysAgoFunction(job?.createdAt)} days ago`}
         </p>
-        <Button variant="outline" className="rounded-full" size="icon">
-          <Bookmark />
+        <Button
+          variant="outline"
+          className="rounded-full"
+          size="icon"
+          onClick={toggleBookmark}
+        >
+          <Bookmark
+            className={`text-${isBookmarked ? "yellow-500" : "gray-500"}`}
+          />
         </Button>
       </div>
       <div className="flex items-center gap-2 my-2">
@@ -39,10 +81,10 @@ const Job = ({ job }) => {
         </div>
       </div>
       <div>
-        <h1 className="font-bold text-lg my-2">{job?.title}</h1>
+        <h1 className="font-bold text-lg my-1">{job?.title}</h1>
         <p className="text-sm text-gray-600">{job?.description}</p>
       </div>
-      <div className="flex items-center gap-2 mt-4">
+      <div className="flex items-center gap-2 mt-2">
         <Badge className="text-blue-700 font-bold bg-slate-200 hover:bg-slate-400">
           Position: {job?.position}
         </Badge>
@@ -53,7 +95,7 @@ const Job = ({ job }) => {
           Salary: {job?.salary}
         </Badge>
       </div>
-      <div className="flex items-center gap-4 mt-4">
+      <div className="flex items-center gap-4 mt-2">
         <Button
           onClick={() => {
             navigate(`/description/${job?._id}`);

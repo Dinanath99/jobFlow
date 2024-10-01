@@ -9,7 +9,7 @@ const LatestJobs = () => {
 
 
   return (
-    <div className="max-w-7xl mx-auto my-20">
+    <div className="max-w-7xl mx-auto ">
       <h1 className="text-4xl font-bold">
         <span className="text-[#6A39C2] px-2">Latest</span> jobs
       </h1>

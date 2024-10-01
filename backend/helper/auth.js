@@ -5,7 +5,7 @@ const { promisify } = require("util");
 //hashing the password
 const hashPassword = async (password) => {
   try {
-    const saltRound = 10;
+    const saltRound = 10;  //salt round use to generate salt for hashing
     const hashedPassword = await bcrypt.hash(password, saltRound);
     return hashedPassword;
   } catch (error) {

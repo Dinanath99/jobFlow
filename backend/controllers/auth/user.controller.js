@@ -43,6 +43,7 @@ const registerUser = async (req, res) => {
       },
     });
 
+    //.save function is used to save the data to the database
     newUser.save();
 
     res.status(201).json({

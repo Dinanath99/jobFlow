@@ -15,6 +15,7 @@ import CompanySetup from "./components/recruiter/CompanySetup";
 import PostJob from "./components/recruiter/PostJob";
 import ProtectedRoute from "./components/recruiter/ProtectedRoute";
 import RecruiterJobs from "./components/recruiter/RecruiterJobs";
+import JobEdit from "./components/recruiter/JobEdit";
 // const appRouter = createBrowserRouter([
 //   {
 //     path: "/",
@@ -158,6 +159,14 @@ const appRouter = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path:"recruiter/jobs/:id",
+    element:(
+      <ProtectedRoute>
+        <JobEdit/>
+      </ProtectedRoute>
+    )
+  }
 ]);
 
 function App() {

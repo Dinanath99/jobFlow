@@ -2,7 +2,7 @@
 
 const JobCard = ({ job }) => {
   return (
-    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+    <div className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200 ">
       <h3 className="font-semibold text-lg">{job.title}</h3>
       <p>{job.company}</p>
       <p className="text-gray-500">{job.location}</p>

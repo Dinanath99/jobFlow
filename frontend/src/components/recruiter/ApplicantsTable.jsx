@@ -248,7 +248,7 @@ const ApplicantsTable = () => {
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        {/* <TableBody>
           {applications.length > 0 ? (
             applications.map((item) => (
               <TableRow key={item._id}>
@@ -269,6 +269,71 @@ const ApplicantsTable = () => {
                   )}
                 </TableCell>
                 <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                <TableCell className="float-right cursor-pointer">
+                  <Popover
+                    open={openPopoverId === item._id}
+                    onOpenChange={() =>
+                      setOpenPopoverId(
+                        openPopoverId === item._id ? null : item._id
+                      )
+                    }
+                  >
+                    <PopoverTrigger>
+                      <MoreHorizontal />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-32">
+                      {shortListingStatus.map((status, index) => (
+                        <div
+                          onClick={() => statusHandler(status, item?._id)}
+                          key={index}
+                          className={`flex w-fit items-center my-2 cursor-pointer p-2 rounded ${
+                            status === "accepted"
+                              ? "bg-green-200 hover:bg-green-500"
+                              : "bg-red-200 hover:bg-red-500"
+                          }`}
+                        >
+                          <span>{status}</span>
+                        </div>
+                      ))}
+                    </PopoverContent>
+                  </Popover>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                No applicants found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody> */}
+
+        <TableBody>
+          {applications.length > 0 ? (
+            applications.map((item) => (
+              <TableRow key={item._id}>
+                <TableCell>{item?.applicant?.fullname || "NA"}</TableCell>
+                <TableCell>{item?.applicant?.email || "NA"}</TableCell>
+                <TableCell>{item?.applicant?.phoneNumber || "NA"}</TableCell>
+                <TableCell className="text-blue-600 cursor-pointer">
+                  {item.applicant?.profile?.resume ? (
+                    <a
+                      href={item?.applicant?.profile?.resumeOriginalName}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {item?.applicant?.profile?.resumeOriginalName}
+                    </a>
+                  ) : (
+                    <span>NA</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {item?.applicant?.createdAt
+                    ? item?.applicant?.createdAt.split("T")[0]
+                    : "NA"}
+                </TableCell>
                 <TableCell className="float-right cursor-pointer">
                   <Popover
                     open={openPopoverId === item._id}

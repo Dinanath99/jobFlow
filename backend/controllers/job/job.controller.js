@@ -142,9 +142,66 @@ const getAdminJobs = async (req, res) => {
     });
   }
 };
+
+const deleteJob = async (req, res) => {
+  try {
+    const jobId = req.params.id; // Get the job ID from the request parameters
+
+    if (!jobId) {
+      return res.status(400).json({ message: "Please provide a job ID" });
+    }
+
+    // Find and delete the job by ID
+    const job = await Job.findByIdAndDelete(jobId);
+
+    // Check if the job was found and deleted
+    if (!job) {
+      return res.status(404).json({ message: "Job not found", success: false });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Job deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+const updateJob = async (req, res) => {
+  try {
+    const jobId = req.params.id; // Get job ID from URL parameters
+    const updates = req.body; // Get updated job data from the request body
+
+    // Find the job by ID and update it with the new data
+    const job = await Job.findByIdAndUpdate(jobId, updates, {
+      new: true, // Return the updated document
+      runValidators: true, // Run schema validators on the updated document
+    });
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found", success: false });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Job updated successfully",
+      job,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   postJob,
   getAllJobs,
   getJobById,
   getAdminJobs,
+  deleteJob,
+  updateJob,
 };

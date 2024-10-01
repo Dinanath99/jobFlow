@@ -10,8 +10,8 @@ const Home = () => {
     <div>
       <Navbar />
       <HeroSection />
-      <Category />
       <LatestJobs />
+      <Category />
       <Footer />
     </div>
   );

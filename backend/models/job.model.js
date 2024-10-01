@@ -11,15 +11,12 @@ const JobSchema = new mongoose.Schema(
       required: [true, "Please enter description"],
     },
     requirements: [
+      // requirements/skills
       {
         type: String,
       },
     ],
-    skills: [
-      {
-        type: String, // Add this line
-      },
-    ],
+
     salary: {
       type: Number,
       required: [true, "Please enter salary"],
