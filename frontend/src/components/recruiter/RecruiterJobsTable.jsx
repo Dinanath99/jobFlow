@@ -116,6 +116,7 @@ import { deleteJob, fetchJobs } from "../../redux/jobAction"; // Adjust the path
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useDispatch } from "react-redux";
 import { Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -132,6 +133,7 @@ const RecruiterJobsTable = () => {
   const { allAdminJobs = [] } = useSelector((store) => store.job);
   const { searchJobByText } = useSelector((store) => store.job);
   const [filterJobs, setFilterJobs] = useState(allAdminJobs);
+
 
   const navigate = useNavigate();
 
@@ -219,6 +221,15 @@ const RecruiterJobsTable = () => {
                         <Trash2 className="w-4" />
                         <span>Delete</span>
                       </div>
+
+                      <div
+                      onClick={() =>
+                         navigate(`/recruiter/jobs/${job._id}/applicants`)
+                       }
+                      className="flex items-center w-fit gap-2 cursor-pointer mt-2"                    >
+                      <Eye className="w-4" />
+                   <span>Applicants</span>
+                </div>
                     </PopoverContent>
                   </Popover>
                 </TableCell>

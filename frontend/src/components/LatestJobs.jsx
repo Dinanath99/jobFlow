@@ -1,13 +1,16 @@
 import useGetAllJobs from "@/hooks/useGetAllJobs"; // Adjust the path if necessary
 import { useSelector } from "react-redux";
 import LatestJobCards from "./LatestJobCards";
+import { useEffect } from "react";
 
 const LatestJobs = () => {
-  useGetAllJobs(); // Call the custom hook to fetch jobs
-  const { allJobs } = useSelector((state) => state.job);
+  // useGetAllJobs(); // Call the custom hook to fetch jobs
+  const { allJobs } = useSelector((store) => store.job);
   console.log(allJobs);
+// useEffect(()=>{
+//   console.log(allJobs)
 
-
+// },[allJobs])
   return (
     <div className="max-w-7xl mx-auto ">
       <h1 className="text-4xl font-bold">
@@ -22,7 +25,7 @@ const LatestJobs = () => {
             .slice(0, 6)
             .map((item) => (
               <LatestJobCards
-                
+
                 key={item._id}
                 job={item}
               />

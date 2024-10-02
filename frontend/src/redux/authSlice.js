@@ -1,16 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
 
+// import { createSlice } from "@reduxjs/toolkit";
 // const initialState = {
 //   loading: false,
 //   user: null,
 // };
 
-// // Safely retrieve user from localStorage
+
 // let initialUser = null;
 // try {
 //   const storedUser = localStorage.getItem("user");
 //   if (storedUser) {
-//     // Check if the storedUser is not 'undefined' and handle it
 //     initialUser = storedUser !== "undefined" ? JSON.parse(storedUser) : null;
 //   }
 // } catch (error) {
@@ -45,11 +44,14 @@ import { createSlice } from "@reduxjs/toolkit";
 // export const { setLoading, setUser, clearUser } = authSlice.actions;
 // export default authSlice.reducer;
 
+
+
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   loading: false,
   user: null,
 };
-
 
 let initialUser = null;
 try {
@@ -85,6 +87,9 @@ const authSlice = createSlice({
     },
   },
 });
+
+// Add a selector for isLoggedIn
+export const selectIsLoggedIn = (state) => !!state.auth.user;
 
 export const { setLoading, setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;

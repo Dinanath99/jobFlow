@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./shared/Navbar";
+import Footer from "./Footer";
 
 // Sample blog data (this can be fetched from an API)
 const blogPosts = [
@@ -63,6 +64,7 @@ const Blog = () => {
           ))}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

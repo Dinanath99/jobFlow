@@ -115,3 +115,4 @@ const recommendJobs = async (req, res) => {
 };
 
 module.exports = { recommendJobs };
+

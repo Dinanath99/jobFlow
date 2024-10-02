@@ -1,0 +1,13 @@
+.datepicker-popper {
+  z-index: 9999 !important; /* Ensure it's above other elements */
+  transform: translate3d(
+    0,
+    0,
+    0
+  ) !important; /* Force the correct transformation */
+}
+
+.react-datepicker__portal {
+  right: auto !important;
+  left: 100% !important; /* Make sure the calendar appears on the right side */
+}
