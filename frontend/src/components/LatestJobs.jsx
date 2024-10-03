@@ -1,16 +1,18 @@
-import useGetAllJobs from "@/hooks/useGetAllJobs"; // Adjust the path if necessary
-import { useSelector } from "react-redux";
-import LatestJobCards from "./LatestJobCards";
+import { setSearchedQuery } from "@/redux/jobSlice";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import LatestJobCards from "./LatestJobCards";
 
 const LatestJobs = () => {
+  const dispatch = useDispatch();
   // useGetAllJobs(); // Call the custom hook to fetch jobs
   const { allJobs } = useSelector((store) => store.job);
   console.log(allJobs);
-// useEffect(()=>{
-//   console.log(allJobs)
+  useEffect(()=>{
+    console.log(allJobs)
 
-// },[allJobs])
+  },[allJobs])
+ 
   return (
     <div className="max-w-7xl mx-auto ">
       <h1 className="text-4xl font-bold">
@@ -23,13 +25,7 @@ const LatestJobs = () => {
         ) : (
           allJobs
             .slice(0, 6)
-            .map((item) => (
-              <LatestJobCards
-
-                key={item._id}
-                job={item}
-              />
-            ))
+            .map((item) => <LatestJobCards key={item._id} job={item} />)
         )}
       </div>
     </div>

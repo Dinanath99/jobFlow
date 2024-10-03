@@ -32,7 +32,7 @@ const calculateCosineSimilarity = (userSkills, jobRequirements) => {
 
 const recommendJobs = async (req, res) => {
   try {
-    const userId = req.id; // Assuming user is authenticated
+    const userId = req.id; // user is authenticated
     const user = await User.findById(userId);
 
     if (!user) {
@@ -74,9 +74,9 @@ const recommendJobs = async (req, res) => {
     // Sort jobs by similarity score (descending order)
     const sortedJobs = jobRecommendations
       .filter((recommendation) => recommendation.similarityScore > 0) // Filter out jobs with zero similarity
-      .sort((a, b) => b.similarityScore - a.similarityScore);
+      .sort((a, b) => b.similarityScore - a.similarityScore);// Sort in descending order
 
-    // Return all job recommendations without pagination
+    
     res.status(200).json({
       success: true,
       message: "Job recommendations fetched successfully",

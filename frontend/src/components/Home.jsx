@@ -1,11 +1,12 @@
-import React from "react";
-import Navbar from "./shared/Navbar";
-import HeroSection from "./HeroSection";
+import useGetAllJobs from "@/hooks/useGetAllJobs";
 import Category from "./Category";
-import LatestJobs from "./LatestJobs";
 import Footer from "./Footer";
+import HeroSection from "./HeroSection";
+import LatestJobs from "./LatestJobs";
+import Navbar from "./shared/Navbar";
 
 const Home = () => {
+  useGetAllJobs();
   return (
     <div>
       <Navbar />

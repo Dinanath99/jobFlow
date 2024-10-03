@@ -20,9 +20,9 @@ const Category = () => {
         "Work on both frontend and backend to deliver complete solutions.",
     },
     {
-      name: "DevOps",
+      name: "UI/UX Designer",
       description:
-        "Streamline and automate development and deployment processes.",
+        "Design beautiful and intuitive user interfaces and experiences.",
     },
     {
       name: "Data Engineer",
@@ -32,7 +32,18 @@ const Category = () => {
       name: "Education and Teaching Jobs",
       description: "Explore opportunities in education and training.",
     },
+    {
+      name: "Cloud Engineer",
+      description:
+        "Develop and maintain scalable cloud infrastructure solutions.",
+    },
+    {
+      name: "Cybersecurity Specialist",
+      description:
+        "Ensure the security and integrity of IT systems and networks.",
+    },
   ];
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,6 +51,7 @@ const Category = () => {
     dispatch(setSearchedQuery(query));
     navigate("/browse");
   };
+
   return (
     <div className="relative bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 text-white py-20">
       <div className="relative z-10">
