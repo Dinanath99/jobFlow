@@ -12,10 +12,10 @@ import Applicants from "./components/recruiter/Applicants";
 import Companies from "./components/recruiter/Companies";
 import CompanyCreate from "./components/recruiter/CompanyCreate";
 import CompanySetup from "./components/recruiter/CompanySetup";
+import JobEdit from "./components/recruiter/JobEdit";
 import PostJob from "./components/recruiter/PostJob";
 import ProtectedRoute from "./components/recruiter/ProtectedRoute";
 import RecruiterJobs from "./components/recruiter/RecruiterJobs";
-import JobEdit from "./components/recruiter/JobEdit";
 // const appRouter = createBrowserRouter([
 //   {
 //     path: "/",
@@ -160,13 +160,13 @@ const appRouter = createBrowserRouter([
     ),
   },
   {
-    path:"recruiter/jobs/:id",
-    element:(
+    path: "recruiter/jobs/:id",
+    element: (
       <ProtectedRoute>
-        <JobEdit/>
+        <JobEdit />
       </ProtectedRoute>
-    )
-  }
+    ),
+  },
 ]);
 
 function App() {

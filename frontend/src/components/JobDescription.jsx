@@ -161,11 +161,7 @@
 
 
 import { setSingleJob } from "@/redux/jobSlice";
-import {
-  APPLICATION_API_END_POINT,
-  JOB_API_END_POINT,
-  SIMILAR_JOBS_API_END_POINT,
-} from "@/utils/constant";
+import { APPLICATION_API_END_POINT, JOB_API_END_POINT } from "@/utils/constant";
 import {
   faBriefcase,
   faCalendarAlt,
@@ -181,7 +177,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "./shared/Navbar";
-import SimilarJob from "./SimilarJob";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
@@ -190,12 +185,11 @@ const JobDescription = () => {
   const jobId = params.id;
   const { singleJob } = useSelector((store) => store.job);
   const { user } = useSelector((store) => store.auth);
-  const isIntiallyApplied =
+  const isInitiallyApplied =
     singleJob?.applications?.some(
       (application) => application.applicant === user?._id
     ) || false;
-  const [isApplied, setIsApplied] = useState(isIntiallyApplied);
-  const [similarJobs, setSimilarJobs] = useState([]); // State for similar jobs
+  const [isApplied, setIsApplied] = useState(isInitiallyApplied);
   const dispatch = useDispatch();
 
   const applyJobHandler = async () => {
@@ -220,28 +214,18 @@ const JobDescription = () => {
     }
   };
 
-  const fetchSimilarJobs = async () => {
-    try {
-      const res = await axios.get(
-        `${SIMILAR_JOBS_API_END_POINT}/similarjob/${jobId}`,
-        {
-          withCredentials: true,
-        }
-      );
-      if (res.data.success) {
-        setSimilarJobs(res.data.jobs); // Set the similar jobs
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     const fetchSingleJob = async () => {
       try {
-        const res = await axios.get(`${JOB_API_END_POINT}/getbyid/${jobId}`, {
-          withCredentials: true,
-        });
+        // Conditionally set withCredentials only if the user is logged in
+        const config = user ? { withCredentials: true } : {};
+
+        const res = await axios.get(
+          `${JOB_API_END_POINT}/getbyid/${jobId}`,
+          {
+            withCredentials: true,
+          }
+        );
         if (res.data.success) {
           dispatch(setSingleJob(res.data.job));
           setIsApplied(
@@ -249,7 +233,6 @@ const JobDescription = () => {
               (application) => application.applicant === user?._id
             )
           );
-          fetchSimilarJobs(); // Fetch similar jobs when single job is fetched
         }
       } catch (error) {
         console.log(error);
@@ -349,13 +332,6 @@ const JobDescription = () => {
                 {singleJob?.description}
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Similar Jobs Section */}
-        <div className="mt-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {/* <SimilarJob /> */}
           </div>
         </div>
       </div>

@@ -167,7 +167,6 @@ const JobRecommendation = () => {
       ) : (
         <p className="text-gray-500 text-center">
           {/* We can show a message here */}
-          No job recommendations available.
         </p>
       )}
     </div>
