@@ -30,7 +30,6 @@ const calculateCosineSimilarity = (userSkills, jobRequirements) => {
   return magnitudeA && magnitudeB ? dotProduct / (magnitudeA * magnitudeB) : 0;
 };
 
-
 const recommendJobs = async (req, res) => {
   try {
     const userId = req.id; // Assuming user is authenticated
@@ -44,14 +43,9 @@ const recommendJobs = async (req, res) => {
     }
 
     const userSkills = user.profile.skills || []; // Get user skills
-    const userLocation = user.profile.location || ""; // Get user location
-    const preferredJobType = user.profile.jobType || ""; // Get user's preferred job type
 
-    // Fetch jobs with filtering options (optional filters for location, jobType)
-    const jobs = await Job.find({
-      ...(userLocation ? { location: userLocation } : {}),
-      ...(preferredJobType ? { jobType: preferredJobType } : {}),
-    });
+    // Fetch all jobs without filtering by job type
+    const jobs = await Job.find({}); // Fetch all jobs
 
     if (!jobs.length) {
       return res.status(404).json({
@@ -82,27 +76,15 @@ const recommendJobs = async (req, res) => {
       .filter((recommendation) => recommendation.similarityScore > 0) // Filter out jobs with zero similarity
       .sort((a, b) => b.similarityScore - a.similarityScore);
 
-    // Paginate the results
-    const limit = parseInt(req.query.limit, 10) || 5;
-    const page = parseInt(req.query.page, 10) || 1;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-
-    const paginatedResults = sortedJobs.slice(startIndex, endIndex);
-
-    // Return the job recommendations along with pagination info
+    // Return all job recommendations without pagination
     res.status(200).json({
       success: true,
       message: "Job recommendations fetched successfully",
-      recommendations: paginatedResults.map((recommendation) => ({
+      recommendations: sortedJobs.map((recommendation) => ({
         job: recommendation.job,
         similarityScore: recommendation.similarityScore,
       })),
-      pagination: {
-        totalJobs: sortedJobs.length,
-        currentPage: page,
-        totalPages: Math.ceil(sortedJobs.length / limit),
-      },
+      totalJobs: sortedJobs.length, // Total number of job recommendations
     });
   } catch (error) {
     res.status(500).json({
@@ -115,4 +97,3 @@ const recommendJobs = async (req, res) => {
 };
 
 module.exports = { recommendJobs };
-

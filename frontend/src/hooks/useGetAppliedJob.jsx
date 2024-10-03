@@ -24,7 +24,7 @@ const useGetAppliedJob = () => {
       }
     };
     fetchAppliedJobs();
-  }, []);
+  }, [dispatch]);
 };
 
 export default useGetAppliedJob;

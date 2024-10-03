@@ -44,6 +44,7 @@ const postJob = async (req, res) => {
       created_by: userId,
       skills,
     });
+    await job.save();
     res.status(201).json({
       success: true,
       message: "Job created successfully",
@@ -100,7 +101,7 @@ const getJobById = async (req, res) => {
       return res.status(400).json({ message: "Please provide job id" });
     }
     const job = await Job.findById(jobid).populate({
-      path: "applications",
+      path: "aptiplicaons",
     });
     if (!job) {
       return res.status(404).json({ message: "Job not found", success: false });
