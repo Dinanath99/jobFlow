@@ -1,7 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
 import jobflow from "@/assets/jobflow.png";
+import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="relative bg-gradient-to-r from-purple-500 via-indigo-500 to-purple-600 text-white py-10">
@@ -69,7 +68,7 @@ const Footer = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-bold mb-4">Follow & Subscribe</h2>
+          <h2 className="text-lg font-bold mb-4">Follow Us on social media</h2>
           <div className="flex space-x-4 mb-4">
             <a href="#" aria-label="Facebook" className="hover:text-gray-400">
               <Facebook />
@@ -84,22 +83,6 @@ const Footer = () => {
               <Youtube />
             </a>
           </div>
-          <form className="flex items-center">
-            <input
-              type="email"
-              placeholder="Your Email"
-              className="w-full px-4 py-2 rounded-l-md text-gray-800 outline-none"
-            />
-            <button
-              type="submit"
-              className="px-4 py-2 bg-[#6A38C2] text-white rounded-r-md hover:bg-[#290568]"
-            >
-              Subscribe
-            </button>
-          </form>
-          <p className="text-sm mt-2">
-            Subscribe to JobFlow Job Board and get the latest updates daily.
-          </p>
         </div>
 
         <div>
