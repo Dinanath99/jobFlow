@@ -1,9 +1,11 @@
 require("dotenv").config();
 const User = require("../../models/user.model");
+const OTP = require("../../models/otp.model");
 const { hashPassword, comparePassword } = require("../../helper/auth");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { profile } = require("console");
+const { generateOTP, sendOTPEmail } = require("../../helper/otpservice");
 
 const cloudinary = require("../../utils/cloudinary");
 const getDataUri = require("../../utils/datauri");
@@ -58,7 +60,6 @@ const registerUser = async (req, res) => {
     });
   }
 };
-
 
 const loginUser = async (req, res) => {
   try {
@@ -172,8 +173,6 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
-
-
 const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
@@ -235,4 +234,110 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, logOut, updateProfile };
+//verify OTP and password
+
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const employee = await User.findOne({ email });
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const OTPCode = generateOTP(6);
+
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    await OTP.findOneAndUpdate(
+      { email: email },
+      { email: email, otp: OTPCode, expiresAt: expiresAt },
+      { upsert: true }
+    );
+
+    const emailSent = await sendOTPEmail(
+      employee.email,
+      employee.name,
+      OTPCode
+    );
+    if (!emailSent) {
+      return res.status(500).json({
+        success: false,
+        message: "Error sending OTP",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "OTP sent to registered email address",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+const verifyOTPandResetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    // Find OTP record by email
+    const otpRecord = await OTP.findOne({ email });
+    if (!otpRecord) {
+      return res.status(404).json({
+        success: false,
+        message: "OTP not found",
+      });
+    }
+
+    // Check if the OTP is correct and not expired
+    if (otpRecord.otp !== otp || otpRecord.expiresAt < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or expired OTP",
+      });
+    }
+
+    // Find employee by email
+    const employee = await User.findOne({ email });
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: "Employee not found",
+      });
+    }
+
+    // Hash the new password before saving
+    const hashedPassword = await hashPassword(newPassword);
+    employee.password = hashedPassword;
+    await employee.save();
+
+    // Remove the OTP record after successful password reset
+    await OTP.deleteOne({ email: email });
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+    });
+  }
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  logOut,
+  updateProfile,
+  forgotPassword,
+  verifyOTPandResetPassword,
+};

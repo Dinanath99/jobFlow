@@ -16,6 +16,7 @@ import JobEdit from "./components/recruiter/JobEdit";
 import PostJob from "./components/recruiter/PostJob";
 import ProtectedRoute from "./components/recruiter/ProtectedRoute";
 import RecruiterJobs from "./components/recruiter/RecruiterJobs";
+import ForgotPassword from "./components/auth/ForgotPassword";
 // const appRouter = createBrowserRouter([
 //   {
 //     path: "/",
@@ -84,6 +85,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/forgot",
+    element: <ForgotPassword/>,
   },
   {
     path: "/login",

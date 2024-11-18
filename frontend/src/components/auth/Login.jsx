@@ -136,20 +136,20 @@
 
 // export default Login;
 
-import React, { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import Navbar from "../shared/Navbar";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { setLoading, setUser } from "@/redux/authSlice";
 import { USER_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
-import { setUser, setLoading } from "@/redux/authSlice";
+import { useFormik } from "formik";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import * as Yup from "yup";
+import Navbar from "../shared/Navbar";
 
 // Define the validation schema
 const validationSchema = Yup.object({
@@ -287,9 +287,9 @@ const Login = () => {
           </Button>
 
           <span className="text-sm">
-            Don't have an account?
-            <Link to="/signup" className="text-blue-700">
-              Signup
+            Forgot Password?
+            <Link to="/forgot" className="text-blue-700">
+              Login
             </Link>
           </span>
         </form>
