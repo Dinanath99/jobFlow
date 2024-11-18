@@ -205,9 +205,11 @@ const Signup = () => {
         .min(6, "Password must be at least 6 characters.")
         .required("Password is required."),
       phoneNumber: Yup.string()
-        .matches(/^\d+$/, "Phone number must be numeric.")
-        .required("Phone number is required.")
-        .min(10, "Phone number must be at least 10 characters."),
+        .matches(
+          /^9\d{9}$/,
+          "Phone number must start with 9 and be 10 digits long."
+        )
+        .required("Phone number is required."),
       role: Yup.string().required("Role is required."),
       file: Yup.mixed().test(
         "fileSize",
@@ -215,6 +217,7 @@ const Signup = () => {
         (value) => !value || value.size <= 2000000
       ), // 2MB
     }),
+
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append("fullname", values.fullname);

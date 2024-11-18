@@ -1,6 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import ForgotPassword from "./components/auth/ForgotPassword";
 import Login from "./components/auth/Login";
+import SetNewPassword from "./components/auth/SetNewPassword";
 import Signup from "./components/auth/Signup";
 import Blog from "./components/Blog";
 import Browse from "./components/Browse";
@@ -16,7 +18,6 @@ import JobEdit from "./components/recruiter/JobEdit";
 import PostJob from "./components/recruiter/PostJob";
 import ProtectedRoute from "./components/recruiter/ProtectedRoute";
 import RecruiterJobs from "./components/recruiter/RecruiterJobs";
-import ForgotPassword from "./components/auth/ForgotPassword";
 // const appRouter = createBrowserRouter([
 //   {
 //     path: "/",
@@ -88,7 +89,11 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/forgot",
-    element: <ForgotPassword/>,
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/set-new-password",
+    element: <SetNewPassword />,
   },
   {
     path: "/login",
