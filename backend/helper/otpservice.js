@@ -26,7 +26,7 @@ const sendOTPEmail = async (employeeEmail, employeeName, OTP) => {
       from: "jobflow@gmail.com",
       to: employeeEmail,
       subject: "OTP for Password Reset",
-      text: `Dear ${employeeName},\n\nYour OTP for password reset is: ${OTP}\n\nPlease enter this OTP on the reset password page.\n\nThank you.\n`,
+      text: `Dear Employee,\n\nYour OTP for password reset is: ${OTP}\n\nPlease enter this OTP on the reset password page.\n\nThank you.\n`,
     };
 
     // Send email

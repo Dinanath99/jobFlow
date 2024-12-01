@@ -79,7 +79,7 @@ const loginUser = async (req, res) => {
         message: "User not found",
       });
     }
-
+    //if the user found, compare the password
     const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -209,7 +209,6 @@ const updateProfile = async (req, res) => {
       user.profile.resume = cloudResponse.secure_url; // Store the URL in the database
       user.profile.resumeOriginalName = file.originalname; // Store the original name of the file
     }
-
     await user.save();
 
     user = {

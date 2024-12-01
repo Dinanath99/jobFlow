@@ -12,7 +12,7 @@
 // utils/dataUri.js
 
 const DatauriParser = require("datauri/parser");
-const path = require("path");
+const path = require("path"); // importing path module from node package
 
 const getDataUri = (file) => {
   const parser = new DatauriParser(); // Create a new instance of DatauriParser
