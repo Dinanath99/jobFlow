@@ -96,7 +96,7 @@ const loginUser = async (req, res) => {
     }
 
     const tokenData = {
-      userId: user._id,
+      userId: user._id,   
     };
 
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET, {

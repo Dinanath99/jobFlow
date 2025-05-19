@@ -123,17 +123,16 @@
 
 // export default ForgotPassword;
 
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { USER_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import Navbar from "../shared/Navbar";
-import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -181,8 +180,8 @@ const ForgotPassword = () => {
         >
           <h1 className="font-bold text-xl mb-5">Forgot Password</h1>
           <p className="mb-4 text-gray-600">
-            Enter your registered email address. We'll send you a link to reset
-            your password.
+            Enter your registered email address. We will send you a link to
+            reset your password.
           </p>
 
           <div className="my-4">
