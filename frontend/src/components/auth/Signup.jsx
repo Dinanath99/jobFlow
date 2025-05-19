@@ -1,20 +1,25 @@
+
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup } from "@/components/ui/radio-group";
-import { USER_API_END_POINT } from "@/utils/constant";
-import axios from "axios";
-import { useFormik } from "formik";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import * as Yup from "yup";
+import { Eye, EyeOff } from "lucide-react";
 import Navbar from "../shared/Navbar";
+import { USER_API_END_POINT } from "@/utils/constant";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.auth.user); //return the user from the state
+  const user = useSelector((state) => state.auth.user);
+  const [showPassword, setShowPassword] = useState(false);
+
   const formik = useFormik({
     initialValues: {
       fullname: "",
@@ -45,9 +50,8 @@ const Signup = () => {
         "fileSize",
         "File is too large",
         (value) => !value || value.size <= 2000000
-      ), // 2MB
+      ),
     }),
-
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append("fullname", values.fullname);
@@ -55,7 +59,6 @@ const Signup = () => {
       formData.append("password", values.password);
       formData.append("phoneNumber", values.phoneNumber);
       formData.append("role", values.role);
-
       if (values.file) {
         formData.append("file", values.file);
       }
@@ -65,7 +68,7 @@ const Signup = () => {
           `${USER_API_END_POINT}/register`,
           formData,
           {
-            Headers: {
+            headers: {
               "Content-Type": "multipart/form-data",
             },
             withCredentials: true,
@@ -83,11 +86,11 @@ const Signup = () => {
   });
 
   useEffect(() => {
-    //if user is already logged in then redirect to home page
     if (user) {
       navigate("/");
     }
-  });
+  }, [user, navigate]);
+
   return (
     <div className="my-20">
       <Navbar />
@@ -132,15 +135,25 @@ const Signup = () => {
 
           <div className="my-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Enter your password"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-2/4 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
             {formik.touched.password && formik.errors.password && (
               <p className="text-red-600 text-sm">{formik.errors.password}</p>
             )}
@@ -222,7 +235,7 @@ const Signup = () => {
             Signup
           </Button>
           <span className="text-sm">
-            Already have an account?
+            Already have an account?{" "}
             <Link to="/login" className="text-blue-700">
               Login
             </Link>
