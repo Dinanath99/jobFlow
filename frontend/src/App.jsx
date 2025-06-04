@@ -18,66 +18,7 @@ import JobEdit from "./components/recruiter/JobEdit";
 import PostJob from "./components/recruiter/PostJob";
 import ProtectedRoute from "./components/recruiter/ProtectedRoute";
 import RecruiterJobs from "./components/recruiter/RecruiterJobs";
-// const appRouter = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Home />,
-//   },
-//   {
-//     path: "/signup",
-//     element: <Signup />,
-//   },
-//   {
-//     path: "/login",
-//     element: <Login />,
-//   },
-//   {
-//     path: "/jobs",
-//     element: <Jobs />,
-//   },
-//   {
-//     path: "/description/:id",
-//     element: <Description />,
-//   },
-//   {
-//     path: "/browse",
-//     element: <Browse />,
-//   },
-//   {
-//     path: "/blog",
-//     element: <Blog />,
-//   },
-//   {
-//     path: "/profile",
-//     element: <Profile />,
-//   },
 
-//   //recruiter routes
-//   {
-//     path: "recruiter/companies",
-//     element: <Companies />,
-//   },
-//   {
-//     path: "recruiter/companies/create",
-//     element: <CompanyCreate />,
-//   },
-//   {
-//     path: "recruiter/companies/:id",
-//     element: <CompanySetup />,
-//   },
-//   {
-//     path: "recruiter/recruiterJobs",
-//     element: <RecruiterJobs />,
-//   },
-//   {
-//     path: "recruiter/jobs/create",
-//     element: <PostJob />,
-//   },
-//   {
-//     path: "recruiter/jobs/:id/applicants",
-//     element: <Applicants />,
-//   },
-// ]);
 const appRouter = createBrowserRouter([
   {
     path: "/",
